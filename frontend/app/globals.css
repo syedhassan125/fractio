@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@theme {
+  --color-gold: #C9A84C;
+  --color-gold-light: #E8C97A;
+  --color-gold-dim: rgba(201,168,76,0.15);
+  --color-gold-glow: rgba(201,168,76,0.3);
+  --color-green: #4ade80;
+
+  --color-bg: #080807;
+  --color-bg-2: #0F0E0C;
+  --color-bg-card: #111009;
+  --color-bg-elevated: #1A1814;
+  --color-bg-hover: #211F1A;
+  --color-border: rgba(201,168,76,0.12);
+  --color-border-strong: rgba(201,168,76,0.25);
+  --color-text: #F0EBE0;
+  --color-text-dim: rgba(240,235,224,0.5);
+  --color-text-muted: rgba(240,235,224,0.3);
+
+  --font-display: "Cinzel", serif;
+  --font-body: "Josefin Sans", sans-serif;
+  --font-mono: "Space Mono", monospace;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: #080807;
+  color: #F0EBE0;
+  font-family: 'Josefin Sans', sans-serif;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit !important; text-decoration: none !important; }
+
+/* Gold gradient button */
+.btn-gold {
+  background: linear-gradient(135deg, #E8C97A 0%, #C9A84C 50%, #A8883A 100%);
+  color: #1a1200;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  transition: all 0.2s ease;
+}
+.btn-gold:hover {
+  background: linear-gradient(135deg, #F0D888 0%, #E8C97A 50%, #C9A84C 100%);
+  box-shadow: 0 0 24px rgba(201,168,76,0.35);
+}
+
+.btn-outline {
+  border: 1px solid rgba(201,168,76,0.35);
+  color: #C9A84C;
+  font-family: 'Josefin Sans', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  transition: all 0.2s ease;
+}
+.btn-outline:hover {
+  border-color: #C9A84C;
+  background: rgba(201,168,76,0.08);
+  box-shadow: 0 0 20px rgba(201,168,76,0.15);
+}
+
+/* Cards */
+.card {
+  background: #111009;
+  border: 1px solid rgba(201,168,76,0.1);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+  border-color: rgba(201,168,76,0.25);
+  box-shadow: 0 4px 32px rgba(0,0,0,0.4);
+}
+
+/* Gold text */
+.text-gold { color: #C9A84C; }
+.text-gold-light { color: #E8C97A; }
+
+/* Cinzel display font */
+.font-display { font-family: 'Cinzel', serif; }
+.font-body { font-family: 'Josefin Sans', sans-serif; }
+.font-mono { font-family: 'Space Mono', monospace; }
+
+/* Glow divider */
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), transparent);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: #080807; }
+::-webkit-scrollbar-thumb { background: rgba(201,168,76,0.2); }
+::-webkit-scrollbar-thumb:hover { background: #C9A84C; }
+
+/* Progress bar */
+.progress-bar {
+  height: 2px;
+  background: rgba(201,168,76,0.12);
+  position: relative;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #C9A84C, #E8C97A);
+  position: absolute;
+  left: 0; top: 0;
+}
+
+/* Label caps */
+.label {
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(240,235,224,0.45);
+}
+
+/* Stat value */
+.stat-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  color: #F0EBE0;
+}
+
+/* Gold badge */
+.badge-gold {
+  background: rgba(201,168,76,0.12);
+  border: 1px solid rgba(201,168,76,0.3);
+  color: #C9A84C;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+
+/* Green badge */
+.badge-green {
+  background: rgba(74,222,128,0.1);
+  border: 1px solid rgba(74,222,128,0.25);
+  color: #4ade80;
+  font-family: 'Josefin Sans', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse-gold { 0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3); } 50% { box-shadow: 0 0 0 8px rgba(201,168,76,0); } }

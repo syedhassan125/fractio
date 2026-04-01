@@ -1,0 +1,720 @@
+{
+  "address": "9UppnXx6fQQLz5g7cR2HAye38vSk3C5GANUTMd1aB5zm",
+  "metadata": {
+    "name": "fractio",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "claim_rental",
+      "discriminator": [
+        229,
+        240,
+        45,
+        157,
+        253,
+        42,
+        205,
+        69
+      ],
+      "accounts": [
+        {
+          "name": "property"
+        },
+        {
+          "name": "investor_position",
+          "writable": true
+        },
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "close_property",
+      "discriminator": [
+        221,
+        217,
+        65,
+        122,
+        187,
+        119,
+        89,
+        243
+      ],
+      "accounts": [
+        {
+          "name": "property",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "create_property",
+      "discriminator": [
+        45,
+        115,
+        89,
+        113,
+        193,
+        252,
+        125,
+        27
+      ],
+      "accounts": [
+        {
+          "name": "property",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "developer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "name",
+          "type": "string"
+        },
+        {
+          "name": "location",
+          "type": "string"
+        },
+        {
+          "name": "asset_type",
+          "type": {
+            "defined": {
+              "name": "AssetType"
+            }
+          }
+        },
+        {
+          "name": "total_valuation",
+          "type": "u64"
+        },
+        {
+          "name": "total_tokens",
+          "type": "u64"
+        },
+        {
+          "name": "token_price",
+          "type": "u64"
+        },
+        {
+          "name": "expected_yield",
+          "type": "u64"
+        },
+        {
+          "name": "docs_ipfs_hash",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "deposit_rental",
+      "discriminator": [
+        11,
+        78,
+        18,
+        231,
+        176,
+        9,
+        112,
+        96
+      ],
+      "accounts": [
+        {
+          "name": "property",
+          "writable": true
+        },
+        {
+          "name": "developer",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "get_claimable_rental",
+      "discriminator": [
+        105,
+        56,
+        12,
+        225,
+        117,
+        159,
+        223,
+        232
+      ],
+      "accounts": [
+        {
+          "name": "property"
+        },
+        {
+          "name": "investor_position"
+        }
+      ],
+      "args": [],
+      "returns": "u64"
+    },
+    {
+      "name": "purchase_tokens",
+      "discriminator": [
+        142,
+        1,
+        16,
+        160,
+        115,
+        120,
+        55,
+        254
+      ],
+      "accounts": [
+        {
+          "name": "property",
+          "writable": true
+        },
+        {
+          "name": "investor_position",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  115,
+                  105,
+                  116,
+                  105,
+                  111,
+                  110
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "property"
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "compliance"
+        },
+        {
+          "name": "investor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "revoke_investor",
+      "discriminator": [
+        81,
+        196,
+        65,
+        97,
+        158,
+        243,
+        172,
+        101
+      ],
+      "accounts": [
+        {
+          "name": "compliance",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "suspend_property",
+      "discriminator": [
+        3,
+        235,
+        28,
+        110,
+        91,
+        107,
+        91,
+        15
+      ],
+      "accounts": [
+        {
+          "name": "property",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "transfer_tokens",
+      "discriminator": [
+        54,
+        180,
+        238,
+        175,
+        74,
+        85,
+        126,
+        188
+      ],
+      "accounts": [
+        {
+          "name": "from_position",
+          "writable": true
+        },
+        {
+          "name": "to_position",
+          "writable": true
+        },
+        {
+          "name": "to_compliance"
+        },
+        {
+          "name": "from_investor",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "verify_property",
+      "discriminator": [
+        155,
+        196,
+        192,
+        102,
+        122,
+        77,
+        122,
+        207
+      ],
+      "accounts": [
+        {
+          "name": "property",
+          "writable": true
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "whitelist_investor",
+      "discriminator": [
+        170,
+        217,
+        235,
+        93,
+        175,
+        201,
+        83,
+        58
+      ],
+      "accounts": [
+        {
+          "name": "compliance",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  109,
+                  112,
+                  108,
+                  105,
+                  97,
+                  110,
+                  99,
+                  101
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "investor"
+              }
+            ]
+          }
+        },
+        {
+          "name": "investor"
+        },
+        {
+          "name": "admin",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "kyc_level",
+          "type": "u8"
+        },
+        {
+          "name": "country",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "ComplianceRecord",
+      "discriminator": [
+        147,
+        228,
+        164,
+        27,
+        251,
+        44,
+        67,
+        185
+      ]
+    },
+    {
+      "name": "InvestorPosition",
+      "discriminator": [
+        145,
+        143,
+        236,
+        150,
+        229,
+        40,
+        195,
+        88
+      ]
+    },
+    {
+      "name": "Property",
+      "discriminator": [
+        195,
+        247,
+        69,
+        181,
+        195,
+        47,
+        152,
+        19
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NameTooLong",
+      "msg": "Property name is too long"
+    },
+    {
+      "code": 6001,
+      "name": "InvalidTokenAmount",
+      "msg": "Token amount must be greater than zero"
+    },
+    {
+      "code": 6002,
+      "name": "InvalidTokenPrice",
+      "msg": "Token price must be greater than zero"
+    },
+    {
+      "code": 6003,
+      "name": "ValuationMismatch",
+      "msg": "Token price x total tokens must equal total valuation"
+    },
+    {
+      "code": 6004,
+      "name": "InvalidStatus",
+      "msg": "Property is not in the correct status for this action"
+    },
+    {
+      "code": 6005,
+      "name": "PropertyNotActive",
+      "msg": "Property is not active for investment"
+    },
+    {
+      "code": 6006,
+      "name": "NotEnoughTokensAvailable",
+      "msg": "Not enough tokens available"
+    },
+    {
+      "code": 6007,
+      "name": "InvestorNotVerified",
+      "msg": "Investor is not KYC verified"
+    },
+    {
+      "code": 6008,
+      "name": "InsufficientTokenBalance",
+      "msg": "Insufficient token balance"
+    },
+    {
+      "code": 6009,
+      "name": "InvalidRentalAmount",
+      "msg": "Rental amount must be greater than zero"
+    },
+    {
+      "code": 6010,
+      "name": "NoTokensSold",
+      "msg": "No tokens have been sold yet"
+    },
+    {
+      "code": 6011,
+      "name": "NoTokensHeld",
+      "msg": "Investor holds no tokens"
+    },
+    {
+      "code": 6012,
+      "name": "NothingToClaim",
+      "msg": "Nothing to claim yet"
+    }
+  ],
+  "types": [
+    {
+      "name": "AssetType",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Residential"
+          },
+          {
+            "name": "Commercial"
+          },
+          {
+            "name": "Mixed"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ComplianceRecord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_verified",
+            "type": "bool"
+          },
+          {
+            "name": "kyc_level",
+            "type": "u8"
+          },
+          {
+            "name": "country",
+            "type": "string"
+          },
+          {
+            "name": "verified_at",
+            "type": "i64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "InvestorPosition",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "investor",
+            "type": "pubkey"
+          },
+          {
+            "name": "property_id",
+            "type": "pubkey"
+          },
+          {
+            "name": "tokens_held",
+            "type": "u64"
+          },
+          {
+            "name": "total_invested",
+            "type": "u64"
+          },
+          {
+            "name": "total_rental_claimed",
+            "type": "u64"
+          },
+          {
+            "name": "unclaimed_rental",
+            "type": "u64"
+          },
+          {
+            "name": "investment_date",
+            "type": "i64"
+          },
+          {
+            "name": "rental_debt",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Property",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "id",
+            "type": "pubkey"
+          },
+          {
+            "name": "developer",
+            "type": "pubkey"
+          },
+          {
+            "name": "name",
+            "type": "string"
+          },
+          {
+            "name": "location",
+            "type": "string"
+          },
+          {
+            "name": "asset_type",
+            "type": {
+              "defined": {
+                "name": "AssetType"
+              }
+            }
+          },
+          {
+            "name": "total_valuation",
+            "type": "u64"
+          },
+          {
+            "name": "total_tokens",
+            "type": "u64"
+          },
+          {
+            "name": "token_price",
+            "type": "u64"
+          },
+          {
+            "name": "tokens_sold",
+            "type": "u64"
+          },
+          {
+            "name": "expected_yield",
+            "type": "u64"
+          },
+          {
+            "name": "docs_ipfs_hash",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "type": {
+              "defined": {
+                "name": "PropertyStatus"
+              }
+            }
+          },
+          {
+            "name": "created_at",
+            "type": "i64"
+          },
+          {
+            "name": "total_rental_deposited",
+            "type": "u64"
+          },
+          {
+            "name": "rental_per_token",
+            "type": "u64"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PropertyStatus",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Active"
+          },
+          {
+            "name": "Funded"
+          },
+          {
+            "name": "Suspended"
+          },
+          {
+            "name": "Closed"
+          }
+        ]
+      }
+    }
+  ]
+}
