@@ -82,22 +82,20 @@ pub mod fractio {
     pub fn purchase_tokens(ctx: Context<PurchaseTokens>, amount: u64) -> Result<()> {
         require!(amount > 0, FractioError::InvalidTokenAmount);
 
-        let property = &mut ctx.accounts.property;
+        // Validate before mutable borrow
         require!(
-            property.status == PropertyStatus::Active,
+            ctx.accounts.property.status == PropertyStatus::Active,
             FractioError::PropertyNotActive
         );
         require!(
-            property.tokens_sold.checked_add(amount).unwrap() <= property.total_tokens,
+            ctx.accounts.property.tokens_sold.checked_add(amount).unwrap() <= ctx.accounts.property.total_tokens,
             FractioError::NotEnoughTokensAvailable
         );
+        require!(ctx.accounts.compliance.is_verified, FractioError::InvestorNotVerified);
 
-        let compliance = &ctx.accounts.compliance;
-        require!(compliance.is_verified, FractioError::InvestorNotVerified);
+        let cost = amount.checked_mul(ctx.accounts.property.token_price).unwrap();
 
-        let cost = amount.checked_mul(property.token_price).unwrap();
-
-        // Transfer SOL from investor to developer
+        // Transfer SOL from investor to property account
         let cpi_ctx = CpiContext::new(
             ctx.accounts.system_program.to_account_info(),
             anchor_lang::system_program::Transfer {
@@ -107,26 +105,30 @@ pub mod fractio {
         );
         anchor_lang::system_program::transfer(cpi_ctx, cost)?;
 
+        // Now mutably borrow to update state
+        let rental_per_token = ctx.accounts.property.rental_per_token;
+        let property_key = ctx.accounts.property.key();
+        let property = &mut ctx.accounts.property;
         property.tokens_sold = property.tokens_sold.checked_add(amount).unwrap();
         if property.tokens_sold == property.total_tokens {
             property.status = PropertyStatus::Funded;
         }
 
+        let investor_key = ctx.accounts.investor.key();
         let position = &mut ctx.accounts.investor_position;
         if position.tokens_held == 0 {
-            position.investor = ctx.accounts.investor.key();
-            position.property_id = property.key();
+            position.investor = investor_key;
+            position.property_id = property_key;
             position.investment_date = Clock::get()?.unix_timestamp;
-            position.rental_debt = property.rental_per_token;
+            position.rental_debt = rental_per_token;
         } else {
             // Settle unclaimed rental before adding more tokens
-            let claimable = property
-                .rental_per_token
+            let claimable = rental_per_token
                 .saturating_sub(position.rental_debt)
                 .checked_mul(position.tokens_held)
                 .unwrap();
             position.unclaimed_rental = position.unclaimed_rental.checked_add(claimable).unwrap();
-            position.rental_debt = property.rental_per_token;
+            position.rental_debt = rental_per_token;
         }
 
         position.tokens_held = position.tokens_held.checked_add(amount).unwrap();
@@ -157,19 +159,13 @@ pub mod fractio {
     pub fn deposit_rental(ctx: Context<DepositRental>, amount: u64) -> Result<()> {
         require!(amount > 0, FractioError::InvalidRentalAmount);
 
+        require!(ctx.accounts.property.tokens_sold > 0, FractioError::NoTokensSold);
+
+        // Transfer SOL from developer to property account (direct lamport transfer)
+        **ctx.accounts.developer.to_account_info().try_borrow_mut_lamports()? -= amount;
+        **ctx.accounts.property.to_account_info().try_borrow_mut_lamports()? += amount;
+
         let property = &mut ctx.accounts.property;
-        require!(property.tokens_sold > 0, FractioError::NoTokensSold);
-
-        // Transfer SOL from developer to property account
-        let cpi_ctx = CpiContext::new(
-            ctx.accounts.system_program.to_account_info(),
-            anchor_lang::system_program::Transfer {
-                from: ctx.accounts.developer.to_account_info(),
-                to: property.to_account_info(),
-            },
-        );
-        anchor_lang::system_program::transfer(cpi_ctx, amount)?;
-
         let per_token = amount.checked_div(property.tokens_sold).unwrap();
         property.rental_per_token = property.rental_per_token.checked_add(per_token).unwrap();
         property.total_rental_deposited = property.total_rental_deposited.checked_add(amount).unwrap();
@@ -301,7 +297,6 @@ pub struct DepositRental<'info> {
     pub property: Account<'info, Property>,
     #[account(mut)]
     pub developer: Signer<'info>,
-    pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
